@@ -8,5 +8,8 @@ class User(AbstractUser):
         verbose_name_plural = "Пользователи"
         ordering = ["username"]
 
-    birthdate = models.DateTimeField(null=True)
-    image = models.ImageField(null=True, blank=True)
+    birthdate = models.DateField(null=True)
+    image = models.ImageField(null=True, blank=True, upload_to='users_avatars')
+
+    # def __str__(self):
+    #     self.username

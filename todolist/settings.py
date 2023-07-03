@@ -20,8 +20,7 @@ env = environ.Env(
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
-# BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-# # print(BASE_DIR)
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 # Quick-start development settings - unsuitable for production
@@ -33,7 +32,7 @@ SECRET_KEY = env('SECRET_KEY')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
+DEBUG = env.bool('DEBUG')
 ALLOWED_HOSTS = ["*"]
 
 
