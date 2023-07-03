@@ -10,3 +10,6 @@ class User(AbstractUser):
 
     birthdate = models.DateTimeField(null=True)
     image = models.ImageField(null=True, blank=True)
+
+    # def __str__(self):
+    #     self.username
