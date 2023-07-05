@@ -1,0 +1,40 @@
+
+version: "3.9"
+services:
+  frontend:
+
+
+
+  api:
+    build:
+      context: .
+    ports:
+      - 8000:80
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
+      volumes:
+        - ./docker_config.py:/code/default_config.py
+  migrations:
+    build:
+      context: .
+    depends_on:
+      postgres:
+        condition: service_healthy
+    command: postgres db upgrade
+
+  postgres:
+      image: postgres:latest
+      env_file: .env
+      environment:
+        POSTGRES_USER: postgres
+        POSTGRES_PASSWORD: postgres
+        POSTGRES_DB: postgres
+      healthcheck:
+        test: ["CMD-SHELL", "pg_isready -U postgres"]
+        interval: 5s
+        timeout: 5s
+        retries: 5
+
