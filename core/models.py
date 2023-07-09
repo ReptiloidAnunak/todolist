@@ -11,5 +11,3 @@ class User(AbstractUser):
     birthdate = models.DateField(null=True)
     image = models.ImageField(null=True, blank=True, upload_to='users_avatars')
 
-    def __str__(self):
-        self.username
