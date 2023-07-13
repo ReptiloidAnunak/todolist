@@ -2,7 +2,12 @@
 version: "3.9"
 services:
   frontend:
-
+    image: sermalenk/skypro-front:lesson-34
+    ports:
+      - "80:80"
+    depends_on:
+      api:
+        condition: service_started
 
 
   api:
@@ -15,15 +20,13 @@ services:
         condition: service_healthy
       migrations:
         condition: service_completed_successfully
-      volumes:
-        - ./docker_config.py:/code/default_config.py
   migrations:
     build:
       context: .
     depends_on:
       postgres:
         condition: service_healthy
-    command: postgres db upgrade
+    command: python manage.py manage.py makemigrations && python manage.py manage.py migrate
 
   postgres:
       image: postgres:latest
@@ -37,4 +40,7 @@ services:
         interval: 5s
         timeout: 5s
         retries: 5
+
+      volumes:
+        - /var/lib/docker/volumes/pg_data
 
