@@ -1,7 +1,7 @@
 name: Build and deploy action
 on: [push]
 jobs:
-  build_and_puch:
+  build_and_push:
     runs-on: ubuntu-latest
     steps:
       #Логируем копирование кода
@@ -25,9 +25,10 @@ jobs:
 
   deploy:
     runs-on: ubuntu-latest
+    needs: build_and_push
     steps:
       - name: clone code
-        uses: actions/checout@v3
+        uses: actions/checkout@v2
       - name: render configs
         run: |
           mkdir deploy
