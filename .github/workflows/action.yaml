@@ -39,8 +39,8 @@ jobs:
           host: ${{ secrets.SERVER_HOST }}
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
-          source: "deploy/docker-compose.yaml"
-          target: "todolist_ci/"
+          source: "deploy/docker-compose.yaml, deploy/docker_config.py"
+          target: "todolist"
           strip_components: 1
       - name: run docker-compose
         uses: appleboy/ssh-action@master
@@ -49,5 +49,5 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
-            cd todolist_ci
+            cd todolist
             echo ${{ secrets.SERVER_PASSWORD }} | sudo -S docker compose up -d
