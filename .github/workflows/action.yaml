@@ -15,4 +15,7 @@ jobs:
         run: ls -la
       # Собираем
       - name: docker build
-        run: docker build -t todolist:$GITHUB_REF_NAME-$GITHUB_RUN_ID .
+        run: docker build -t artemiystepanov/todolist:$GITHUB_REF_NAME-$GITHUB_RUN_ID .
+      #Отправляем в Docker hub
+      - name: docker push
+        run: docker push artemiystepanov/todolist:$GITHUB_REF_NAME-$GITHUB_RUN_ID
