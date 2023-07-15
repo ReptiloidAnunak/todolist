@@ -49,5 +49,5 @@ jobs:
           username: ${{ secrets.SERVER_USERNAME }}
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
-            cd todolist
+            cd todolist_ci
             echo ${{ secrets.SERVER_PASSWORD }} | sudo -S docker compose up -d
