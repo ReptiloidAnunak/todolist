@@ -22,3 +22,13 @@ jobs:
       #Отправляем в Docker hub
       - name: docker push
         run: docker push artemiystepanov/todolist:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: clone code
+        uses: actions/checout@v2
+      - name: render configs
+        run: |
+          mkdir deploy
+          cat docker-compose-ci.yaml | envsubst > deploy/docker-compose.yaml
