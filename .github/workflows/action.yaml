@@ -54,9 +54,9 @@ jobs:
           password: ${{ secrets.SERVER_PASSWORD }}
           script: |
             cd todolist_ci
-            sudo su
+            sudo docker-compose up -d
             ${{ secrets.SERVER_PASSWORD }}
-            docker-compose up -d
+            
       
 #      - name: Cleanup
 #        if: always()
