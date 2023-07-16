@@ -18,17 +18,15 @@ services:
         condition: service_healthy
       migrations:
         condition: service_completed_successfully
-#    volumes:
-#      - ./docker_config.py:/code/default_config.py
+
   migrations:
     env_file: .env
     image: artemiystepanov/todolist:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     depends_on:
       postgres:
         condition: service_healthy
-    command: python manage.py manage.py makemigrations && python manage.py manage.py migrate
-#    volumes:
-#      - ./docker_config.py:/code/default_config.py
+    command: python manage.py manage.py migrate
+
   postgres:
       image: postgres:latest
       environment:
