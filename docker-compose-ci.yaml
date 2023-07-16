@@ -25,7 +25,9 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-#    command: python manage.py migrate
+    volumes:
+      - ./migrations:/var/lib/docker/volumes/data
+    command: python manage.py migrate
 
   postgres:
       image: postgres:latest
