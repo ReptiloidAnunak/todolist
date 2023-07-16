@@ -13,6 +13,7 @@ services:
   api:
     build:
       context: .
+    env_file: .env
     image: artemiystepanov/todolist
     ports:
       - 8000:80
@@ -26,6 +27,7 @@ services:
   migrations:
     build:
       context: .
+    env_file: .env
     image: artemiystepanov/todolist
     depends_on:
       postgres:
