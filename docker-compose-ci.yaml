@@ -2,7 +2,7 @@
 version: "3.9"
 services:
   frontend:
-    image: sermalenk/skypro-front:lesson-34
+    image: sermalenk/skypro-front:lesson-36
     ports:
       - "80:80"
     depends_on:
@@ -20,8 +20,8 @@ services:
         condition: service_completed_successfully
 
   migrations:
-    env_file: .env
     image: artemiystepanov/todolist:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    env_file: .env
     depends_on:
       postgres:
         condition: service_healthy
@@ -36,8 +36,8 @@ services:
       healthcheck:
         test: ["CMD-SHELL", "pg_isready -U postgres"]
         interval: 5s
-        timeout: 5s
-        retries: 5
+        timeout: 10s
+        retries: 10
 
       volumes:
         - ./pg_data:/var/lib/docker/volumes/data
