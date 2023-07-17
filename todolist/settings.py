@@ -33,6 +33,7 @@ SECRET_KEY = env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env.bool('DEBUG')
+# DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
     "core",
 
 ]
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
