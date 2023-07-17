@@ -9,7 +9,6 @@ services:
       api:
         condition: service_started
 
-
   api:
     build:
       context: .
@@ -33,7 +32,6 @@ services:
       postgres:
         condition: service_healthy
     command: python manage.py migrate
-#    command: python manage.py manage.py makemigrations && python manage.py manage.py migrate
 
   postgres:
       image: postgres:latest
