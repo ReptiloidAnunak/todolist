@@ -25,7 +25,7 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    command: python manage.py migrate
+    command: python ./manage.py migrate
 
   postgres:
       image: postgres:latest
