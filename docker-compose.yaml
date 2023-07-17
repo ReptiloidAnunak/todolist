@@ -32,9 +32,9 @@ services:
     depends_on:
       postgres:
         condition: service_healthy
-    command: python manage.py manage.py makemigrations && python manage.py manage.py migrate
-    volumes:
-      - ./docker_config.py:/code/default_config.py
+    command: python manage.py migrate
+#    command: python manage.py manage.py makemigrations && python manage.py manage.py migrate
+
   postgres:
       image: postgres:latest
       env_file: .env
