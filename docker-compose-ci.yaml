@@ -30,9 +30,9 @@ services:
   postgres:
       image: postgres:latest
       environment:
-        POSTGRES_USER: postgres
-        POSTGRES_PASSWORD: postgres
-        POSTGRES_DB: postgres
+        POSTGRES_USER: .env.DB_USER
+        POSTGRES_PASSWORD: .env.DB_USER
+        POSTGRES_DB: .env.DB_USER
       healthcheck:
         test: ["CMD-SHELL", "pg_isready -U postgres"]
         interval: 5s
