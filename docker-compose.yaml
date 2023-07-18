@@ -13,21 +13,25 @@ services:
     build:
       context: .
     env_file: .env
-    image: artemiystepanov/todolist
+    environment:
+      DB_HOST: postgres
+#    image: artemiystepanov/todolist
     ports:
-      - 8000:80
+      - "8000:8000"
     depends_on:
       postgres:
         condition: service_healthy
       migrations:
         condition: service_completed_successfully
-    volumes:
-      - ./docker_config.py:/code/default_config.py
+
   migrations:
     build:
       context: .
     env_file: .env
-    image: artemiystepanov/todolist
+    environment:
+      DB_HOST: postgres
+
+#    image: artemiystepanov/todolist
     depends_on:
       postgres:
         condition: service_healthy
@@ -35,18 +39,20 @@ services:
 
   postgres:
       image: postgres:latest
-      env_file: .env
+      ports:
+        - "5432:5432"
       environment:
-        DB_HOST: postgres
-        POSTGRES_USER: .env.DB_USER
-        POSTGRES_PASSWORD: .env.DB_PASSWORD
-        POSTGRES_DB: .env.DB_NAME
+        POSTGRES_USER: ${DB_USER}
+        POSTGRES_PASSWORD: ${DB_PASSWORD}
+        POSTGRES_DB: ${DB_NAME}
       healthcheck:
-        test: ["CMD-SHELL", "pg_isready -U postgres"]
+        test: ["CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}"]
         interval: 5s
         timeout: 5s
         retries: 5
 
       volumes:
-        - ./pg_data:/var/lib/docker/volumes/data
+        - pg_data:/var/lib/postgresql/data
 
+volumes:
+  pg_data:

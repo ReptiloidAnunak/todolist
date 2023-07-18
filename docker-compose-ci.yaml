@@ -31,8 +31,8 @@ services:
       image: postgres:latest
       environment:
         POSTGRES_USER: .env.DB_USER
-        POSTGRES_PASSWORD: .env.DB_USER
-        POSTGRES_DB: .env.DB_USER
+        POSTGRES_PASSWORD: .env.DB_PASSWORD
+        POSTGRES_DB: .env.DB_NAME
       healthcheck:
         test: ["CMD-SHELL", "pg_isready -U postgres"]
         interval: 5s
