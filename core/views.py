@@ -1,11 +1,12 @@
 from django.contrib.auth import authenticate, login, logout
-from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView
+from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView, UpdateAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 
 from core.models import User
-from core.serializers import UserCreateSerializer, UserLoginSerializer, UserDetailSerializer
+from core.serializers import UserCreateSerializer, UserLoginSerializer, UserDetailSerializer, \
+    UserUpdatePwdSerializer
 
 
 class UserRegView(CreateAPIView):
@@ -36,9 +37,28 @@ class UserProfileView(RetrieveUpdateDestroyAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_object(self) -> User: #Добавить сообщение о необходимой аутентификации
-        self.request.user
+        return self.request.user
 
     def delete(self, request, *args, **kwargs):
         logout(request)
         return Response('Вы вышли из аккаунта', 200)
+
+
+class UserPwdUpdate(UpdateAPIView):
+    queryset = User
+    serializer_class = UserUpdatePwdSerializer
+
+    def get_object(self) -> User:
+        return self.request.user
+
+    def put(self, request, *args, **kwargs):
+        user = request.user
+        if user.check_password(request.data["old_password"]):
+            user.set_password(request.data["new_password"])
+            user.save()
+            return Response("Пароль успешно обновлен", 200)
+        else:
+            return Response("Старый пароль неверный", 403)
+
+
 

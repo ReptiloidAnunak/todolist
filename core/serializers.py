@@ -1,7 +1,6 @@
 
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
-from django.contrib.auth import authenticate
 from core.models import User
 
 
@@ -37,3 +36,12 @@ class UserLoginSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['username', 'password']
+
+
+class UserUpdatePwdSerializer(serializers.ModelSerializer):
+    old_password = serializers.CharField(write_only=True)
+    new_password = serializers.CharField(write_only=True)
+
+    class Meta:
+        model = User
+        fields = ['old_password', 'new_password']
