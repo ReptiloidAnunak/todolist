@@ -47,6 +47,8 @@ class UserProfileView(RetrieveUpdateDestroyAPIView):
 class UserPwdUpdate(UpdateAPIView):
     queryset = User
     serializer_class = UserUpdatePwdSerializer
+    permission_classes = [IsAuthenticated]
+
 
     def get_object(self) -> User:
         return self.request.user
@@ -58,7 +60,15 @@ class UserPwdUpdate(UpdateAPIView):
             user.save()
             return Response("Пароль успешно обновлен", 200)
         else:
-            return Response("Старый пароль неверный", 403)
+            return Response("Старый пароль введен неправильно", 403)
 
 
+    def patch(self, request, *args, **kwargs):
+        user = request.user
+        if user.check_password(request.data["old_password"]):
+            user.set_password(request.data["new_password"])
+            user.save()
+            return Response("Пароль успешно обновлен", 200)
+        else:
+            return Response("Старый пароль введен неправильно", 403)
 
