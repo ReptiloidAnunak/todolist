@@ -1,6 +1,5 @@
-from django.contrib.auth import authenticate, login
-from django.shortcuts import get_object_or_404
-from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView
+from django.contrib.auth import authenticate, login, logout
+from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
@@ -31,11 +30,15 @@ class AuthUserView(APIView):
             return Response("Логин или пароль неверный", 403)
 
 
-class UserProfileView(RetrieveUpdateAPIView):
+class UserProfileView(RetrieveUpdateDestroyAPIView):
     queryset = User
     serializer_class = UserDetailSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_object(self) -> User:
-        return self.request.user
+    def get_object(self) -> User: #Добавить сообщение о необходимой аутентификации
+        self.request.user
+
+    def delete(self, request, *args, **kwargs):
+        logout(request)
+        return Response('Вы вышли из аккаунта', 200)
 
