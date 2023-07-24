@@ -30,13 +30,14 @@ services:
   postgres:
       image: postgres:latest
       environment:
-        POSTGRES_USER: .env.DB_USER
-        POSTGRES_PASSWORD: .env.DB_PASSWORD
-        POSTGRES_DB: .env.DB_NAME
+        POSTGRES_USER: ${DB_USER}
+        POSTGRES_PASSWORD: ${DB_PASSWORD}
+        POSTGRES_DB: ${DB_NAME}
       healthcheck:
-        test: ["CMD-SHELL", "pg_isready -U postgres"]
+#        test: ["CMD-SHELL", "pg_isready -U postgres"]
+        test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
         interval: 5s
-        timeout: 10s
+        timeout: 5s
         retries: 10
 
       volumes:
