@@ -10,9 +10,7 @@ services:
         condition: service_started
   api:
     image: artemiystepanov/todolist:$GITHUB_REF_NAME-$GITHUB_RUN_ID
-    env_file: .env
-#    ports:
-#      - 80:80
+    env_file: .envDo
     depends_on:
       postgres:
         condition: service_healthy
@@ -34,7 +32,6 @@ services:
         POSTGRES_PASSWORD: ${DB_PASSWORD}
         POSTGRES_DB: ${DB_NAME}
       healthcheck:
-#        test: ["CMD-SHELL", "pg_isready -U postgres"]
         test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
         interval: 5s
         timeout: 5s
