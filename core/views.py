@@ -3,6 +3,7 @@ from rest_framework.generics import CreateAPIView, RetrieveUpdateDestroyAPIView,
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework import status
 
 from core.models import User
 from core.serializers import UserCreateSerializer, UserLoginSerializer, UserDetailSerializer, \
@@ -20,15 +21,15 @@ class AuthUserView(APIView):
     serializer_class = UserLoginSerializer
 
     def post(self, request):
-        username = request.POST["username"]
-        password = request.POST["password"]
+        username = request.POST.get("username")
+        password = request.POST.get("password")
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
             return Response(UserDetailSerializer(user).data)
 
         else:
-            return Response("Логин или пароль неверный", 403)
+            return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserProfileView(RetrieveUpdateDestroyAPIView):
@@ -41,7 +42,7 @@ class UserProfileView(RetrieveUpdateDestroyAPIView):
 
     def delete(self, request, *args, **kwargs):
         logout(request)
-        return Response('Вы вышли из аккаунта', 200)
+        return Response(status=status.HTTP_403_FORBIDDEN)
 
 
 class UserPwdUpdate(UpdateAPIView):
