@@ -30,9 +30,6 @@ class UserCreateSerializer(serializers.ModelSerializer):
 
 
 class UserLoginSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(write_only=True)#write_only=True
-    password = serializers.CharField(write_only=True)#write_only=True
-
     class Meta:
         model = User
         fields = ['username', 'password']

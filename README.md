@@ -31,6 +31,22 @@
 1. Установить необходимые пакеты с помощью команды _pip install -r requirements.txt
 2. Установить docker в случае его отсутствия (продолжение следует...)
  
-Ссылка для запуска: http://127.0.0.1/auth
+* Ссылка для запуска: http://127.0.0.1/auth
+* Мой сайт: http://reptiloidanunak.site/auth
 
+В случае проблем с запуском контейнера:
+1. docker compose down
+2. sudo systemctl stop docker
+3. sudo systemctl start docker
+4. lsof -i :5432 | sudo ss -lptn 'sport = :5432'
+5. sudo kill pid
+6. sudo service apache2 stop
+7. docker compose up -d
+
+Обновление вольюмов при внесении правок в код:
+1. docker system prune -af
+2. docker volume prune -f
+
+Посмотреть логи ошибок:
+1. docker compose logs -f api
 
