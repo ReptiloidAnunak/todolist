@@ -10,5 +10,11 @@ class UserAdmin(admin.ModelAdmin):
               'is_active', 'is_staff', 'date_joined', 'last_login', 'image']
 
 
+class GoalCategoryAdmin(admin.ModelAdmin):
+    list_display = ("title", "user", "created", "updated")
+    search_fields = ("title", "user__username")
+
+
 admin.site.register(User, UserAdmin)
-admin.site.register(GoalCategory)
+admin.site.register(GoalCategory, GoalCategoryAdmin)
+
