@@ -99,20 +99,6 @@ DATABASES = {
     }
 }
 
-# DATABASES = {
-#     # read os.environ['DATABASE_URL'] and raises
-#     # ImproperlyConfigured exception if not found
-#     #
-#     # The db() method is an alias for db_url().
-#     'default': env.db(),
-#
-#     # read os.environ['SQLITE_URL']
-#     'extra': env.db_url(
-#         'SQLITE_URL',
-#         default='sqlite:////tmp/my-tmp-sqlite.db'
-#     )
-# }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -136,6 +122,19 @@ AUTH_USER_MODEL = "core.User"
 
 SOCIAL_AUTH_JSONFIELD_ENABLED = True
 
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.open_id.OpenIdAuth',
+    'social_core.backends.google.GoogleOpenId',
+    'social_core.backends.google.GoogleOAuth2',
+    'social_core.backends.google.GoogleOAuth',
+    'social_core.backends.twitter.TwitterOAuth',
+    'social_core.backends.yahoo.YahooOpenId',
+    'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.vk.VKOAuth2'
+)
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = '51709160'
+SOCIAL_AUTH_VK_OAUTH2_SECRET = 'ZTRexjQIxxEQxMtDUvNo'
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
