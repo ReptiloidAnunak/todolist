@@ -123,18 +123,15 @@ AUTH_USER_MODEL = "core.User"
 SOCIAL_AUTH_JSONFIELD_ENABLED = True
 
 AUTHENTICATION_BACKENDS = (
-    'social_core.backends.open_id.OpenIdAuth',
-    'social_core.backends.google.GoogleOpenId',
-    'social_core.backends.google.GoogleOAuth2',
-    'social_core.backends.google.GoogleOAuth',
-    'social_core.backends.twitter.TwitterOAuth',
-    'social_core.backends.yahoo.YahooOpenId',
+    'social_core.backends.vk.VKOAuth2',
     'django.contrib.auth.backends.ModelBackend',
-    'social_core.backends.vk.VKOAuth2'
+
 )
 
 SOCIAL_AUTH_VK_OAUTH2_KEY = '51709160'
 SOCIAL_AUTH_VK_OAUTH2_SECRET = 'ZTRexjQIxxEQxMtDUvNo'
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email', 'first_name', 'last_name']
+SOCIAL_AUTH_USER_MODEL = "core.User"
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
