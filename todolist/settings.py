@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "social_django",
     "core",
 
 ]
@@ -132,6 +133,8 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = "core.User"
+
+SOCIAL_AUTH_JSONFIELD_ENABLED = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/

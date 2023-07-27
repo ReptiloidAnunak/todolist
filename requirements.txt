@@ -7,3 +7,4 @@ djangorestframework~=3.14.0
 Pillow~=10.0.0
 psycopg2-binary
 social-auth-app-django~=5.2.0
+
