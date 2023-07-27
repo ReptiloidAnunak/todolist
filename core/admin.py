@@ -1,5 +1,6 @@
 from django.contrib import admin
 from core.models import User
+from goals.models import GoalCategory
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -10,3 +11,4 @@ class UserAdmin(admin.ModelAdmin):
 
 
 admin.site.register(User, UserAdmin)
+admin.site.register(GoalCategory)

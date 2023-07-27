@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     "rest_framework",
     "social_django",
     "core",
+    "goals",
 
 ]
 
@@ -128,8 +129,8 @@ AUTHENTICATION_BACKENDS = (
 
 )
 
-SOCIAL_AUTH_VK_OAUTH2_KEY = '51709160'
-SOCIAL_AUTH_VK_OAUTH2_SECRET = 'ZTRexjQIxxEQxMtDUvNo'
+SOCIAL_AUTH_VK_OAUTH2_KEY = env('VK_OAUTH2_KEY')
+SOCIAL_AUTH_VK_OAUTH2_SECRET = env('VK_OAUTH2_SECRET')
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email', 'first_name', 'last_name']
 SOCIAL_AUTH_USER_MODEL = "core.User"
 # Internationalization
