@@ -21,8 +21,8 @@ class GoalCategory(models.Model):
         self.updated = timezone.now()  # проставляем дату обновления
         return super().save(*args, **kwargs)
 
-    def __str__(self):
-        return self.title
+    # def __str__(self):
+    #     return self.title
 
 
 class Goal(models.Model):

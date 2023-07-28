@@ -28,7 +28,7 @@ class GoalCreateSerializer(serializers.ModelSerializer):
                                             required=True,
                                             queryset=GoalCategory.objects.all(),
                                             label="Категория",
-                                            slug_field="title",)
+                                            slug_field="title")
 
     class Meta:
         model = Goal

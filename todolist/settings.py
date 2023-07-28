@@ -134,6 +134,13 @@ SOCIAL_AUTH_VK_OAUTH2_KEY = env('VK_OAUTH2_KEY')
 SOCIAL_AUTH_VK_OAUTH2_SECRET = env('VK_OAUTH2_SECRET')
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email', 'first_name', 'last_name']
 SOCIAL_AUTH_USER_MODEL = "core.User"
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/goals/goal_category/list'
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/core/login'
+SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/goals/goal_category/list'
+SOCIAL_AUTH_NEW_ASSOCIATION_REDIRECT_URL = '/goals/goal_category/list'
+SOCIAL_AUTH_DISCONNECT_REDIRECT_URL = '/core/login'
+SOCIAL_AUTH_INACTIVE_USER_URL = '/core/login'
+
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
 
