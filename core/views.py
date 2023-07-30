@@ -27,10 +27,12 @@ class AuthUserView(APIView):
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
-            return Response(UserDetailSerializer(user).data, status=status.HTTP_200_OK)
+            return Response(UserDetailSerializer(user).data,
+                            status=status.HTTP_200_OK)
 
         else:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
+            return Response("Неправильный логин или пароль",
+                            status=status.HTTP_400_BAD_REQUEST)
 
 
 class UserProfileView(RetrieveUpdateDestroyAPIView):
@@ -38,7 +40,7 @@ class UserProfileView(RetrieveUpdateDestroyAPIView):
     serializer_class = UserDetailSerializer
     permission_classes = [IsAuthenticated]
 
-    def get_object(self) -> User: #Добавить сообщение о необходимой аутентификации
+    def get_object(self) -> User:
         return self.request.user
 
     def delete(self, request, *args, **kwargs):

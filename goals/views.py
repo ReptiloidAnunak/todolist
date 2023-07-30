@@ -8,6 +8,7 @@ from goals.models import GoalCategory, Goal
 from goals.serializers import GoalCatCreateSerializer, GoalCategorySerializer, GoalCreateSerializer, GoalSerializer
 from filters import GoalDateFilter
 
+
 class GoalCategoryCreateView(CreateAPIView):
     model = GoalCategory
     permission_classes = [permissions.IsAuthenticated]
@@ -69,6 +70,7 @@ class GoalListView(ListAPIView):
         )
     filter_backends = [DjangoFilterBackend]
     filterset_class = GoalDateFilter
+
 
 class GoalView(RetrieveUpdateDestroyAPIView):
     model = Goal

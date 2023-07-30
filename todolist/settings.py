@@ -58,6 +58,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "social_django.middleware.SocialAuthExceptionMiddleware",#Добавил, вроде бы надо
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -130,19 +131,24 @@ AUTHENTICATION_BACKENDS = (
 
 )
 
+# Social media authentication
+
 SOCIAL_AUTH_VK_OAUTH2_KEY = env('VK_OAUTH2_KEY')
 SOCIAL_AUTH_VK_OAUTH2_SECRET = env('VK_OAUTH2_SECRET')
 SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email', 'first_name', 'last_name']
 SOCIAL_AUTH_USER_MODEL = "core.User"
 
-# SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/goals/goal_category/list?limit=10'
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/logged-in?next=/goals/goal_category/list?limit=10'
 
+
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/logged-in/"
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/core/login'
-SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/logged-in?next=/goals/goal_category/list?limit=10'
-SOCIAL_AUTH_NEW_ASSOCIATION_REDIRECT_URL = '/logged-in?next=/goals/goal_category/list?limit=10'
+SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/logged-in/'
+SOCIAL_AUTH_NEW_ASSOCIATION_REDIRECT_URL = '/logged-in/'
 SOCIAL_AUTH_DISCONNECT_REDIRECT_URL = '/core/login'
 SOCIAL_AUTH_INACTIVE_USER_URL = '/core/login'
+
+VKOAuth2_SOCIAL_AUTH_RAISE_EXCEPTIONS = True
+SOCIAL_AUTH_RAISE_EXCEPTIONS = True
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
