@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from goals.models import GoalCategory, Goal
+from goals.models import GoalCategory, Goal, GoalComment
 from core.serializers import UserDetailSerializer
 
 
@@ -53,6 +53,31 @@ class GoalSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Goal
+        fields = "__all__"
+        read_only_fields = ("id", "created", "updated", "user")
+
+
+class GoalCommentSerializer(serializers.ModelSerializer):
+    user = UserDetailSerializer(read_only=True)
+
+    class Meta:
+        model = GoalComment
+        fields = "__all__"
+        read_only_fields = ("id", "created", "updated", "user", "goal")
+
+
+class GoalCommentCreateSerializer(serializers.ModelSerializer):
+    user = serializers.HiddenField(default=serializers.CurrentUserDefault())
+
+    def validate_goal(self, goal):
+        if goal.is_deleted:
+            raise serializers.ValidationError("not allowed in deleted goal")
+        if goal.user != self.context["request"].user:
+            raise serializers.ValidationError("not owner of goal")
+        return goal
+
+    class Meta:
+        model = GoalComment
         fields = "__all__"
         read_only_fields = ("id", "created", "updated", "user")
 

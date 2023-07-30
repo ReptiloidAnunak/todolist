@@ -16,7 +16,7 @@ class GoalCategoryAdmin(admin.ModelAdmin):
 
 
 class GoalAdmin(admin.ModelAdmin):
-    list_display = ("category", "title", "user", "created", "updated")
+    list_display = ("title", "category",  "user", "created", "updated")
     search_fields = ("category", "title", "user__username")
 
 
