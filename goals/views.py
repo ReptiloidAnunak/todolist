@@ -44,7 +44,14 @@ class GoalCategoryView(RetrieveUpdateDestroyAPIView):
         return GoalCategory.objects.filter(user=self.request.user, is_deleted=False)
 
     def perform_destroy(self, instance):
+        cat_goals = Goal.objects.filter(category=instance.id)
+
+        for goal in cat_goals:
+            goal.is_deleted = True
+            goal.category = None
+            goal.save()
         instance.is_deleted = True
+        instance.delete()
         instance.save()
         return instance
 
@@ -62,14 +69,14 @@ class GoalListView(ListAPIView):
     pagination_class = LimitOffsetPagination
     ordering_fields = ["title", "created"]
     ordering = ["title"]
-
+    search_fields = ["title"]
+    filter_backends = [DjangoFilterBackend, filters.SearchFilter]
+    filterset_class = GoalDateFilter
 
     def get_queryset(self):
         return Goal.objects.filter(
             user=self.request.user, is_deleted=False
         )
-    filter_backends = [DjangoFilterBackend]
-    filterset_class = GoalDateFilter
 
 
 class GoalView(RetrieveUpdateDestroyAPIView):

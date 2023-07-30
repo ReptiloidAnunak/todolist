@@ -139,7 +139,6 @@ SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email', 'first_name', 'last_name']
 SOCIAL_AUTH_USER_MODEL = "core.User"
 
 
-
 SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/logged-in/"
 SOCIAL_AUTH_LOGIN_ERROR_URL = '/core/login'
 SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/logged-in/'

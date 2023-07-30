@@ -7,7 +7,7 @@ from goals.models import Goal
 
 class GoalDateFilter(rest_framework.FilterSet):
     class Meta:
-        mode = Goal
+        model = Goal
         fields = {
             "due_date": ("lte", "gte"),
             "category": ("exact", "in"),

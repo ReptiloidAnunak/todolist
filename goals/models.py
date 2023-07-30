@@ -21,8 +21,8 @@ class GoalCategory(models.Model):
         self.updated = timezone.now()  # проставляем дату обновления
         return super().save(*args, **kwargs)
 
-    # def __str__(self):
-    #     return self.title
+    def __str__(self):
+        return self.title
 
 
 class Goal(models.Model):
@@ -44,7 +44,7 @@ class Goal(models.Model):
 
     title = models.CharField(verbose_name="Название", max_length=255)
     user = models.ForeignKey(User, verbose_name="Автор", on_delete=models.PROTECT)
-    category = models.ForeignKey(GoalCategory, verbose_name="Категория", on_delete=models.PROTECT)
+    category = models.ForeignKey(GoalCategory, verbose_name="Категория", on_delete=models.PROTECT, null=True, blank=True)
     is_deleted = models.BooleanField(verbose_name="Удалена", default=False)
     status = models.PositiveSmallIntegerField(verbose_name="Статус",
                                               choices=Status.choices,
