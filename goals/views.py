@@ -103,11 +103,12 @@ class GoalCommentListView(ListAPIView):
     serializer_class = GoalCommentSerializer
     permission_classes = [permissions.IsAuthenticated]
     pagination_class = LimitOffsetPagination
-    ordering_fields = ["created"]
-    # filter_backends = [
-    #     # filters.OrderingFilter,
-    #     # filters.SearchFilter,
-    # ]
+    ordering_fields = ["created", "updated"]
+    filter_backends = [
+        DjangoFilterBackend,
+        filters.OrderingFilter,
+        filters.SearchFilter,
+    ]
 
 
 class GoalCommentCrateView(CreateAPIView):

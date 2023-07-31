@@ -24,16 +24,15 @@ class GoalCategorySerializer(serializers.ModelSerializer):
 
 class GoalCreateSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
-    category = serializers.SlugRelatedField(read_only=False,
-                                            required=True,
-                                            queryset=GoalCategory.objects.all(),
-                                            label="Категория",
-                                            slug_field="title")
 
     class Meta:
         model = Goal
         read_only_fields = ("id", "created", "updated", "user")
         fields = "__all__"
+
+
+class GoalSerializer(serializers.ModelSerializer):
+    user = UserDetailSerializer(read_only=True)
 
     def validate_category(self, value):
         if value.is_deleted:
@@ -41,15 +40,6 @@ class GoalCreateSerializer(serializers.ModelSerializer):
         if value.user != self.context["request"].user:
             raise serializers.ValidationError("not owner of category")
         return value
-
-
-class GoalSerializer(serializers.ModelSerializer):
-    user = UserDetailSerializer(read_only=True)
-    category = serializers.SlugRelatedField(read_only=False,
-                                            required=True,
-                                            queryset=GoalCategory.objects.all(),
-                                            label="Категория",
-                                            slug_field="title",)
 
     class Meta:
         model = Goal
