@@ -99,16 +99,17 @@ class GoalView(RetrieveUpdateDestroyAPIView):
 
 
 class GoalCommentListView(ListAPIView):
-    queryset = GoalComment.objects.all()
+    model = GoalComment
     serializer_class = GoalCommentSerializer
     permission_classes = [permissions.IsAuthenticated]
     pagination_class = LimitOffsetPagination
+    filter_backends = [filters.OrderingFilter, DjangoFilterBackend]
     ordering_fields = ["created", "updated"]
-    filter_backends = [
-        DjangoFilterBackend,
-        filters.OrderingFilter,
-        filters.SearchFilter,
-    ]
+    filterset_fields = ["goal"]
+    ordering = "-id"
+
+    def get_queryset(self):
+        return GoalComment.objects.filter(user=self.request.user)
 
 
 class GoalCommentCrateView(CreateAPIView):
