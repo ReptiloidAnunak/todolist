@@ -104,10 +104,10 @@ class GoalCommentListView(ListAPIView):
     permission_classes = [permissions.IsAuthenticated]
     pagination_class = LimitOffsetPagination
     ordering_fields = ["created"]
-    filter_backends = [
-        # filters.OrderingFilter,
-        # filters.SearchFilter,
-    ]
+    # filter_backends = [
+    #     # filters.OrderingFilter,
+    #     # filters.SearchFilter,
+    # ]
 
 
 class GoalCommentCrateView(CreateAPIView):
@@ -116,4 +116,12 @@ class GoalCommentCrateView(CreateAPIView):
     serializer_class = GoalCommentCreateSerializer
     permissions_classes = [permissions.IsAuthenticated]
 
+
+class GoalCommentView(RetrieveUpdateDestroyAPIView):
+    model = GoalComment
+    serializer_class = GoalCommentSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def get_queryset(self):
+        return GoalComment.objects.filter(user=self.request.user, is_deleted=False)
 

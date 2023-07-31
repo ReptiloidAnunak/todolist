@@ -13,5 +13,5 @@ urlpatterns = [
 
     path("goal_comment/create", views.GoalCommentCrateView.as_view()),
     path("goal_comment/list", views.GoalCommentListView.as_view()),
-    path("goal_comment/<pk>", views.G)
+    path("goal_comment/<pk>", views.GoalCommentView.as_view()),
 ]
