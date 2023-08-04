@@ -1,17 +1,16 @@
-
+import rest_framework.permissions
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db import transaction
 from rest_framework.generics import (CreateAPIView, ListAPIView, RetrieveUpdateDestroyAPIView,
                                      ListCreateAPIView)
-from rest_framework import permissions
-from rest_framework import filters, response
+from rest_framework import permissions, filters
 from rest_framework.pagination import LimitOffsetPagination
 
 from goals.models import GoalCategory, Goal, GoalComment, Board
 from goals.serializers import (GoalCatCreateSerializer, GoalCategorySerializer, GoalCreateSerializer,
                                GoalSerializer, GoalCommentCreateSerializer, GoalCommentSerializer,
                                BoardCreateSerializer, BoardSerializer)
-from goals.permissions import BoardPermissions
+from goals.permissions import BoardPermissions, GoalCategoryPermission
 from filters import GoalDateFilter, GoalCategoryBoardFilter
 
 
@@ -41,19 +40,26 @@ class GoalCategoryListView(ListAPIView):
     def get_queryset(self):
         return GoalCategory.objects.filter(
             board__participants__user=self.request.user,
-            user=self.request.user, is_deleted=False
+            is_deleted=False
         )
 
 
 class GoalCategoryView(RetrieveUpdateDestroyAPIView):
     model = GoalCategory
     serializer_class = GoalCategorySerializer
-    permission_classes = [permissions.IsAuthenticated]
+    # permission_classes = [permissions.IsAuthenticated, GoalCategoryPermission]
 
     def get_queryset(self):
         return GoalCategory.objects.filter(
             board__participants__user=self.request.user,
-            user=self.request.user, is_deleted=False)
+            is_deleted=False)
+
+    def get_permissions(self):
+        self.permission_classes = [permissions.IsAuthenticated]
+
+        if self.request.method not in permissions.SAFE_METHODS:
+            self.permission_classes = [GoalCategoryPermission]
+        return super(GoalCategoryView, self).get_permissions()
 
     def perform_destroy(self, instance):
         cat_goals = Goal.objects.filter(category=instance.id)
@@ -152,7 +158,8 @@ class BoardView(RetrieveUpdateDestroyAPIView):
     serializer_class = BoardSerializer
 
     def get_queryset(self):
-        return Board.objects.filter(participants__user=self.request.user, is_deleted=False)
+        return Board.objects.filter(participants__user=self.request.user,
+                                    is_deleted=False)
 
     def perform_destroy(self, instance: Board):
         # При удалении доски помечаем ее как is_deleted,
