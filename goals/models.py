@@ -26,6 +26,9 @@ class Board(DatesModelMixin):
     title = models.CharField(verbose_name="Название", max_length=255)
     is_deleted = models.BooleanField(verbose_name="Удалена", default=False)
 
+    def __str__(self):
+        return self.title
+
 
 class GoalCategory(DatesModelMixin):
     class Meta:
@@ -117,6 +120,5 @@ class BoardParticipant(DatesModelMixin):
     role = models.PositiveSmallIntegerField(
         verbose_name="Роль", choices=Role.choices, default=Role.owner
     )
-
 
 
