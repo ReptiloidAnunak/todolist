@@ -1,4 +1,4 @@
-import rest_framework.permissions
+
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db import transaction
 from rest_framework.generics import (CreateAPIView, ListAPIView, RetrieveUpdateDestroyAPIView,
@@ -10,14 +10,14 @@ from goals.models import GoalCategory, Goal, GoalComment, Board
 from goals.serializers import (GoalCatCreateSerializer, GoalCategorySerializer, GoalCreateSerializer,
                                GoalSerializer, GoalCommentCreateSerializer, GoalCommentSerializer,
                                BoardCreateSerializer, BoardSerializer)
-from goals.permissions import BoardPermissions, GoalCategoryPermission
+from goals.permissions import BoardPermissions, GoalCategoryPermission, GoalCategoryCreatePermission
 from filters import GoalDateFilter, GoalCategoryBoardFilter
 
 
 class GoalCategoryCreateView(CreateAPIView):
     model = GoalCategory
-    permission_classes = [permissions.IsAuthenticated]
     serializer_class = GoalCatCreateSerializer
+    permission_classes = [permissions.IsAuthenticated, GoalCategoryCreatePermission]
 
 
 class GoalCategoryListView(ListAPIView):
@@ -47,7 +47,6 @@ class GoalCategoryListView(ListAPIView):
 class GoalCategoryView(RetrieveUpdateDestroyAPIView):
     model = GoalCategory
     serializer_class = GoalCategorySerializer
-    # permission_classes = [permissions.IsAuthenticated, GoalCategoryPermission]
 
     def get_queryset(self):
         return GoalCategory.objects.filter(
