@@ -1,5 +1,5 @@
 from rest_framework import permissions
-from goals.models import BoardParticipant, GoalCategory, Board
+from goals.models import BoardParticipant, GoalCategory, Goal
 
 
 class BoardPermissions(permissions.BasePermission):
@@ -22,23 +22,26 @@ class GoalCategoryPermission(permissions.BasePermission):
         user = request.user
         allowed_cat = GoalCategory.objects.filter(
             board__participants__user=user,
-            board__participants__role__in=[1, 2]
+            board__participants__role__in=[BoardParticipant.Role.owner,
+                                           BoardParticipant.Role.writer]
         )
-        cat_to_change = {goal.title: goal.id for goal in allowed_cat}
+        cat_to_change = {cat.title: cat.id for cat in allowed_cat}
         return obj.id in cat_to_change.values()
 
 
-class GoalCategoryCreatePermission(permissions.BasePermission):
+class GoalPermission(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
         if not request.user.is_authenticated:
             return False
-        board = obj.board
         user = request.user
-        allowed_boards = Board.objects.filter(participants__user=user,
-                                              participants__role__in=[1, 2]
-                                              )
-        board_to_create_cat = {board.title: board.id for board in allowed_boards}
-        print(board.id in board_to_create_cat.values())
-        return board.id in board_to_create_cat.values()
-
-
+        allowed_cat = GoalCategory.objects.filter(
+            board__participants__user=user,
+            board__participants__role__in=[BoardParticipant.Role.owner,
+                                           BoardParticipant.Role.writer]
+        )
+        allowed_goals = Goal.objects.filter(
+            category__board__participants__user=user,
+            category__in=allowed_cat
+        )
+        goals_to_change = {goal.title: goal.id for goal in allowed_goals}
+        return obj.id in goals_to_change.values()
