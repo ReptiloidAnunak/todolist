@@ -49,7 +49,7 @@ class UpdateObj:
 @dataclass
 class GetUpdatesResponse:
     ok: bool
-    result: List[UpdateObj]  # todo
+    result: List[UpdateObj]
 
     class Meta:
         unknown = marshmallow.EXCLUDE

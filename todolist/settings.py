@@ -59,7 +59,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
-    "social_django.middleware.SocialAuthExceptionMiddleware",#Добавил, вроде бы надо
+    "social_django.middleware.SocialAuthExceptionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -149,6 +149,9 @@ SOCIAL_AUTH_INACTIVE_USER_URL = '/core/login'
 
 VKOAuth2_SOCIAL_AUTH_RAISE_EXCEPTIONS = True
 SOCIAL_AUTH_RAISE_EXCEPTIONS = True
+
+# Telegram bot
+TG_BOT_TOKEN = env('TG_BOT_TOKEN')
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
