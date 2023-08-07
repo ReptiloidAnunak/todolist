@@ -20,13 +20,22 @@ class TgClient:
     def get_updates(self, offset: int = 0, timeout: int = 60) -> GetUpdatesResponse:
         url = self.get_url(BotUrlMethods.GET_UPDATES)
         updates_resp = requests.get(url)
-        updates_raw = json.loads(updates_resp.text)
         GetUpdatesResponseSchema = marshmallow_dataclass.class_schema(GetUpdatesResponse)
         result = GetUpdatesResponseSchema().loads(updates_resp.text)
 
-        if not updates_raw:
+        if not result:
             raise NotImplementedError
         return result
 
     def send_message(self, chat_id: int, text: str) -> SendMessageResponse:
-        raise NotImplementedError
+        url = self.get_url(BotUrlMethods.SEND_MESSAGE) + '?chat_id=' + str(chat_id) + '&text=' + text
+        message_resp = requests.get(url)
+        print(url)
+        print(message_resp.text)
+        SendMessageResponseSchema = marshmallow_dataclass.class_schema(SendMessageResponse)
+
+        result = SendMessageResponseSchema().loads(message_resp.text)
+
+        if not result:
+            raise NotImplementedError
+        return result
