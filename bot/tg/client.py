@@ -5,6 +5,7 @@ from bot.tg.dc import GetUpdatesResponse, SendMessageResponse
 from todolist.settings import TG_BOT_TOKEN
 import marshmallow_dataclass
 
+
 class BotUrlMethods:
     GET_UPDATES = "getUpdates"
     SEND_MESSAGE = "sendMessage"
@@ -30,8 +31,6 @@ class TgClient:
     def send_message(self, chat_id: int, text: str) -> SendMessageResponse:
         url = self.get_url(BotUrlMethods.SEND_MESSAGE) + '?chat_id=' + str(chat_id) + '&text=' + text
         message_resp = requests.get(url)
-        print(url)
-        print(message_resp.text)
         SendMessageResponseSchema = marshmallow_dataclass.class_schema(SendMessageResponse)
 
         result = SendMessageResponseSchema().loads(message_resp.text)

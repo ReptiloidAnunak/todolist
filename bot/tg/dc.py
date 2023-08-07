@@ -31,7 +31,7 @@ class Message:
     from_: MessageFrom = field(metadata={"data_key": "from"})
     chat: Chat
     date: int
-    text: str
+    text: Optional[str]
 
     class Meta:
         unknown = marshmallow.EXCLUDE
