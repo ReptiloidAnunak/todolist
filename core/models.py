@@ -11,4 +11,5 @@ class User(AbstractUser):
     username = models.CharField(max_length=100, unique=True)
     birthdate = models.DateField(null=True)
     image = models.ImageField(null=True, blank=True, upload_to='users_avatars')
+    verification_code = models.CharField(max_length=20, null=True)
 

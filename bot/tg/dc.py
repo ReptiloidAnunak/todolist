@@ -7,10 +7,10 @@ from typing import List, Optional
 class MessageFrom:
     id: int
     is_bot: bool
-    first_name: str
-    last_name: Optional[str] #нет в ответе отправленного сообщения
     username: str
-    language_code: Optional[str] #нет в ответе отправленного сообщения
+    language_code: str = "None"
+    last_name: str = "None"
+    first_name: str = "None"
 
     class Meta:
         unknown = marshmallow.EXCLUDE
@@ -19,11 +19,10 @@ class MessageFrom:
 @dataclass
 class Chat:
     id: int
-    first_name: str
-    last_name: str
     username: str
     type: str
-
+    last_name: str = "None"
+    first_name: str = "None"
 
 @dataclass
 class Message:
@@ -31,7 +30,7 @@ class Message:
     from_: MessageFrom = field(metadata={"data_key": "from"})
     chat: Chat
     date: int
-    text: Optional[str]
+    text: str = "__None__"
 
     class Meta:
         unknown = marshmallow.EXCLUDE

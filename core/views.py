@@ -23,7 +23,6 @@ class AuthUserView(APIView):
     def post(self, request):
         username = request.data.get("username")
         password = request.data.get("password")
-        print(username)
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
@@ -53,7 +52,6 @@ class UserPwdUpdate(UpdateAPIView):
     serializer_class = UserUpdatePwdSerializer
     permission_classes = [IsAuthenticated]
 
-
     def get_object(self) -> User:
         return self.request.user
 
@@ -65,7 +63,6 @@ class UserPwdUpdate(UpdateAPIView):
             return Response("Пароль успешно обновлен", 200)
         else:
             return Response("Старый пароль введен неправильно", 403)
-
 
     def patch(self, request, *args, **kwargs):
         user = request.user
