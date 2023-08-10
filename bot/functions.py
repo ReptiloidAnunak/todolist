@@ -8,5 +8,18 @@ def generate_verification_code():
     code = "".join(secrets.choice(symbols) for s in range(20))
     return code
 
-print(generate_verification_code)
+
+def create_goal_list_message(g_list: list):
+    title = "\n\nВАШ СПИСОК ЦЕЛЕЙ\n\n"
+    points = []
+    for goal in g_list:
+        number = g_list.index(goal) + 1
+        point = f"\n{str(number)}. {goal}"
+        points.append(point)
+
+    "\n".join(points)
+    points = "\n".join(points)
+    result = title + points
+    return result
+
 

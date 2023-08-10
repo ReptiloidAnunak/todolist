@@ -11,4 +11,6 @@ dataclasses==0.6
 typing==3.7.4.3
 marshmallow==3.14.1
 marshmallow_dataclass==8.5.3
-
+pytest==7.2.1
+pytest-django==4.5.2
+pytest-factoryboy==2.5.1
