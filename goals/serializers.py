@@ -9,7 +9,9 @@ from core.serializers import UserDetailSerializer
 class GoalCatCreateSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
-    def validate_board(self, board):
+    def validate_board(self, board: Board) -> Board:
+        """Проверяет участие и роль пользователя в доске,
+        дает право создавать категорию, если он владелец или редактор"""
         allowed_boards = Board.objects.filter(participants__user=self.context["request"].user,
                                               participants__role__in=[BoardParticipant.Role.owner,
                                                                       BoardParticipant.Role.writer]
@@ -37,7 +39,7 @@ class GoalCategorySerializer(serializers.ModelSerializer):
 class GoalCreateSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
-    def validate_category(self, category):
+    def validate_category(self, category: GoalCategory) -> GoalCategory:
         allowed_cat = GoalCategory.objects.filter(
             board__participants__user=self.context["request"].user,
             board__participants__role__in=[BoardParticipant.Role.owner,
@@ -57,7 +59,8 @@ class GoalCreateSerializer(serializers.ModelSerializer):
 class GoalSerializer(serializers.ModelSerializer):
     user = UserDetailSerializer(read_only=True)
 
-    def validate_category(self, category):
+    def validate_category(self, category: GoalCategory):
+        """Запрещает создавать цель в удаленной доске"""
         if category.is_deleted:
             raise serializers.ValidationError("not allowed in deleted category")
         return category
@@ -80,7 +83,9 @@ class GoalCommentSerializer(serializers.ModelSerializer):
 class GoalCommentCreateSerializer(serializers.ModelSerializer):
     user = serializers.HiddenField(default=serializers.CurrentUserDefault())
 
-    def validate_goal(self, goal):
+    def validate_goal(self, goal: Goal) -> Goal:
+        """Запрещает комментировать удаленные цели,
+        позволяет комментировать только собственнику и редактору"""
         if goal.is_deleted:
             raise serializers.ValidationError("not allowed in deleted goal")
 
@@ -105,7 +110,9 @@ class BoardCreateSerializer(serializers.ModelSerializer):
         read_only_fields = ("id", "created", "updated")
         fields = "__all__"
 
-    def create(self, validated_data):
+    def create(self, validated_data) -> Board:
+        """Автоматически привязывает пользователя
+         к создаваемой доске в качестве собственника"""
         user = validated_data.pop("user")
         board = Board.objects.create(**validated_data)
         BoardParticipant.objects.create(user=user, board=board, role=BoardParticipant.Role.owner)

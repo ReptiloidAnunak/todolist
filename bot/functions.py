@@ -3,13 +3,17 @@ import secrets
 from bot.models import TgUser
 
 
-def generate_verification_code():
+def generate_verification_code() -> str:
+    """Генерирует код для верификации
+    пользователя Телеграм в приложении"""
     symbols = string.ascii_letters + string.digits
     code = "".join(secrets.choice(symbols) for s in range(20))
     return code
 
 
-def create_goal_list_message(g_list: list):
+def create_goal_list_message(g_list: list) -> str:
+    """Создает список целелей пользователя
+    для отправки телеграм-ботом"""
     title = "\n\nВАШ СПИСОК ЦЕЛЕЙ\n\n"
     points = []
     for goal in g_list:
@@ -22,11 +26,13 @@ def create_goal_list_message(g_list: list):
     return result
 
 
-def create_categories_list(categories_dict: list):
+def create_categories_list(categories_dict: list) -> str:
+    """Создает интерактивный список категорий пользователя
+    для отправки телеграм-ботом"""
     title = "\n\nВаши категории:\n\n"
     cat_list = []
     for key in categories_dict:
-        point = f"/{key}   {categories_dict[key]}"
+        point = f"[{key}]   {categories_dict[key]}"
         cat_list.append(point)
     points = "\n".join(cat_list)
     result = title + points

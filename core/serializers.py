@@ -19,11 +19,14 @@ class UserCreateSerializer(serializers.ModelSerializer):
         fields = ['username', 'first_name', 'last_name', 'email', 'password', 'password_repeat']
 
     def validate(self, attrs: dict) -> dict:
+        """Проверяет совпадение вводов паролей при регистрации"""
         if attrs["password_repeat"] != attrs['password']:
             raise serializers.ValidationError("Пароли должны совпадать")
         return attrs
 
     def create(self, validated_data):
+        """Создает запись пользователя в базе данных
+        с проверенным и захэшироанным паролем"""
         del validated_data['password_repeat']
         validated_data['password'] = make_password(validated_data['password'])
         return super().create(validated_data=validated_data)

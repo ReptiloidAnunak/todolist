@@ -37,7 +37,9 @@ class GoalCategoryListView(ListAPIView):
     ordering = ["title"]
     search_fields = ["title"]
 
-    def get_queryset(self):
+    def get_queryset(self) -> list:
+        """Фильтрует категории исключительно
+        для участников доски"""
         return GoalCategory.objects.filter(
             board__participants__user=self.request.user,
             is_deleted=False
@@ -48,12 +50,16 @@ class GoalCategoryView(RetrieveUpdateDestroyAPIView):
     model = GoalCategory
     serializer_class = GoalCategorySerializer
 
-    def get_queryset(self):
+    def get_queryset(self) -> list:
+        """Фильтрует категории исключительно
+        для участников доски"""
         return GoalCategory.objects.filter(
             board__participants__user=self.request.user,
             is_deleted=False)
 
     def get_permissions(self):
+        """Ограничивает права на изменение категорий читателю
+        и неаутентифицированным пользователям"""
         self.permission_classes = [permissions.IsAuthenticated]
 
         if self.request.method not in permissions.SAFE_METHODS:
@@ -61,6 +67,8 @@ class GoalCategoryView(RetrieveUpdateDestroyAPIView):
         return super(GoalCategoryView, self).get_permissions()
 
     def perform_destroy(self, instance):
+        """Переводит категорию в статус is_deleted
+        вместо полного ее удаления из базы данных"""
         cat_goals = Goal.objects.filter(category=instance.id)
 
         for goal in cat_goals:
@@ -95,6 +103,8 @@ class GoalListView(ListAPIView):
     filterset_class = GoalDateFilter
 
     def get_queryset(self):
+        """Фильтрует цели исключительно
+        для участников доски"""
         return Goal.objects.filter(
             category__board__participants__user=self.request.user,
             is_deleted=False,
@@ -106,11 +116,16 @@ class GoalView(RetrieveUpdateDestroyAPIView):
     serializer_class = GoalSerializer
 
     def get_queryset(self):
+        """Фильтрует цели исключительно
+        для участников доски"""
         return Goal.objects.filter(
             category__board__participants__user=self.request.user,
             is_deleted=False)
 
     def get_permissions(self):
+        """В случае использования метода GET дает доступ к просмотру
+        аутентифицированному пользователю.
+        В случае попытки изменения цели задействует GoalPermission"""
         self.permission_classes = [permissions.IsAuthenticated]
 
         if self.request.method not in permissions.SAFE_METHODS:
@@ -118,6 +133,8 @@ class GoalView(RetrieveUpdateDestroyAPIView):
         return super(GoalView, self).get_permissions()
 
     def perform_destroy(self, instance):
+        """Переводит цель в статус is_deleted
+        вместо полного удаления из базы данных"""
         instance.is_deleted = True
         instance.save()
         return instance
@@ -133,6 +150,8 @@ class GoalCommentListView(ListAPIView):
     ordering = "-id"
 
     def get_queryset(self):
+        """Фильтрует комментарии к целям
+        исключительно для участников доски"""
         return GoalComment.objects.filter(
             goal__category__board__participants__user=self.request.user
         )
@@ -151,6 +170,8 @@ class GoalCommentView(RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def get_queryset(self):
+        """Позволяет редактировать и удалять комментарий
+         только его автору"""
         return GoalComment.objects.filter(user=self.request.user)
 
 
@@ -167,12 +188,14 @@ class BoardView(RetrieveUpdateDestroyAPIView):
     serializer_class = BoardSerializer
 
     def get_queryset(self):
+        """Позволяет видеть доску исключительно ее участникам"""
         return Board.objects.filter(participants__user=self.request.user,
                                     is_deleted=False)
 
     def perform_destroy(self, instance: Board):
-        # При удалении доски помечаем ее как is_deleted,
-        # «удаляем» категории, обновляем статус целей
+        """Переводит доску в статус is_deleted вместо полного ее удаления из базы данных,
+        а также связанные с ней категории. Цели переводятся в архив
+        для возможного дальнейшего перераспределения"""
         with transaction.atomic():
             instance.is_deleted = True
             instance.save()
@@ -193,6 +216,7 @@ class BoardListView(ListAPIView):
     ordering = ["title"]
 
     def get_queryset(self):
+        """Позволяет видеть список досок исключительно их участникам"""
         return Board.objects.filter(
             participants__user=self.request.user, is_deleted=False
         )

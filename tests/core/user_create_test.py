@@ -17,5 +17,5 @@ def test_user_create(client):
                           "email": "user@example.com"
                         }
     response = client.get(f"/core/profile")
-    assert response.status_code == 200
+    assert response.status_code == 201
     assert expected_response == response
