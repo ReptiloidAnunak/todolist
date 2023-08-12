@@ -17,9 +17,18 @@ def create_goal_list_message(g_list: list):
         point = f"\n{str(number)}. {goal}"
         points.append(point)
 
-    "\n".join(points)
     points = "\n".join(points)
     result = title + points
     return result
 
+
+def create_categories_list(categories_dict: list):
+    title = "\n\nВаши категории:\n\n"
+    cat_list = []
+    for key in categories_dict:
+        point = f"/{key}   {categories_dict[key]}"
+        cat_list.append(point)
+    points = "\n".join(cat_list)
+    result = title + points
+    return result
 
