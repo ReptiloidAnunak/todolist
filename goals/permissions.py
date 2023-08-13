@@ -45,3 +45,4 @@ class GoalPermission(permissions.BasePermission):
         )
         goals_to_change = {goal.title: goal.id for goal in allowed_goals}
         return obj.id in goals_to_change.values()
+

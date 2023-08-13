@@ -6,7 +6,9 @@ from bot.models import TgUser
 
 class TgUserVerificationSerializer(serializers.ModelSerializer):
 
-    def validate_verification_code(self, verification_code):
+    def validate_verification_code(self, verification_code: str) -> str:
+        """Проверяет наличие пользователя
+        с отправленным верификационным кодом в базе данных"""
         if not TgUser.objects.filter(
                 verification_code=verification_code).exists():
             raise serializers.ValidationError("Код неверный")

@@ -18,6 +18,9 @@ class TgUserVerification(UpdateAPIView):
         return self.request.user
 
     def perform_update(self, serializer):
+        """Получает верификационный код, проверяет его на соответствие с кодом
+         в таблице телеграм-пользователей, связывает тг-аккаунт пользователя
+         с его аккаунтом в приложении. Отправляет сообщение в тг об успешной верификации"""
         tg_client = Command.tg_client
         ver_code = self.request.data["verification_code"]
         tg_user = TgUser.objects.get(verification_code=ver_code)

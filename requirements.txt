@@ -14,3 +14,4 @@ marshmallow_dataclass==8.5.3
 pytest==7.2.1
 pytest-django==4.5.2
 pytest-factoryboy==2.5.1
+mypy==1.5.0

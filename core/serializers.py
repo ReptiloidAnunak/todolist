@@ -24,7 +24,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Пароли должны совпадать")
         return attrs
 
-    def create(self, validated_data):
+    def create(self, validated_data: dict) -> None:
         """Создает запись пользователя в базе данных
         с проверенным и захэшироанным паролем"""
         del validated_data['password_repeat']
