@@ -12,7 +12,7 @@ def generate_verification_code() -> str:
 
 
 def create_goal_list_message(g_list: list) -> str:
-    """Создает список целелей пользователя
+    """Создает список целей пользователя
     для отправки телеграм-ботом"""
     title = "\n\nВАШ СПИСОК ЦЕЛЕЙ\n\n"
     points = []
@@ -38,3 +38,10 @@ def create_categories_list(categories_dict: list) -> str:
     result = title + points
     return result
 
+
+def confirm_goal_creation(new_goal) -> str:
+    """Создает сообщение об успешном создании цели"""
+    message = (f"Цель создана!\n{new_goal.title}"
+               f"\nКатегория: {new_goal.category}"""
+               f"\nВремя создания: {new_goal.created}")
+    return message

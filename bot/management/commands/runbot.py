@@ -4,7 +4,8 @@ from django.core.management.base import BaseCommand
 
 from bot.models import TgUser
 from bot.tg.client import TgClient
-from bot.functions import generate_verification_code, create_goal_list_message, create_categories_list
+from bot.functions import (generate_verification_code, create_goal_list_message,
+                           create_categories_list, confirm_goal_creation)
 from core.models import User
 from goals.models import Goal, GoalCategory
 
@@ -20,7 +21,6 @@ class Command(BaseCommand):
     categories_numbers = []
     categories_dict = {}
     category_title = ""
-    goal_title = ""
 
     def handle(self, *args, **options: Any) -> None:
         offset = 0
@@ -118,10 +118,7 @@ class Command(BaseCommand):
                                         text="\nПришлите название цели в формате: goal-Ваша цель")
 
     def crate_goal(self, user, chat_id, raw_goal):
-
         goal_title = raw_goal.split("-")[1]
-        print("Категория цели: ", self.category_title)
-        print("Цель: ", goal_title)
         category = GoalCategory.objects.filter(is_deleted=False,
                                                user=user,
                                                title=self.category_title).first()
@@ -129,12 +126,12 @@ class Command(BaseCommand):
             title=goal_title,
             user=user,
             category=category,
-            # created=timezone.now(),
-            # updated=timezone.now()
         )
 
         new_goal.save()
-        print(new_goal)
+        response = confirm_goal_creation(new_goal)
+        self.tg_client.send_message(chat_id=chat_id,
+                                    text=response)
 
 
 
