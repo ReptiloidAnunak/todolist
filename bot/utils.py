@@ -1,6 +1,7 @@
 import string
 import secrets
-from bot.models import TgUser
+
+from goals.models import Goal, GoalCategory
 
 
 def generate_verification_code() -> str:
@@ -26,8 +27,8 @@ def create_goal_list_message(g_list: list) -> str:
     return result
 
 
-def create_categories_list(categories_dict: list) -> str:
-    """Создает интерактивный список категорий пользователя
+def create_categories_list(categories_dict: dict) -> str:
+    """Создает список категорий пользователя
     для отправки телеграм-ботом"""
     title = "\n\nВаши категории:\n\n"
     cat_list = []
@@ -39,7 +40,7 @@ def create_categories_list(categories_dict: list) -> str:
     return result
 
 
-def confirm_goal_creation(new_goal) -> str:
+def confirm_goal_creation(new_goal: Goal) -> str:
     """Создает сообщение об успешном создании цели"""
     message = (f"Цель создана!\n{new_goal.title}"
                f"\nКатегория: {new_goal.category}"""
