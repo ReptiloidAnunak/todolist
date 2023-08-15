@@ -1,13 +1,12 @@
+
 version: "3.8"
-#docker compose up -d bot
-#docker compose logs -f bot
 services:
   bot:
     build: .
     env_file: .env
     environment:
       DB_HOST: postgres
-    dns: 8.8.8.8
+#    dns: 8.8.8.8
     depends_on:
       postgres:
         condition: service_healthy

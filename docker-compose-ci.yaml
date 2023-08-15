@@ -6,7 +6,7 @@ services:
     env_file: .env
     environment:
       DB_HOST: postgres
-    dns: 158.160.112.131
+#    dns: 8.8.8.8
     depends_on:
       postgres:
         condition: service_healthy
