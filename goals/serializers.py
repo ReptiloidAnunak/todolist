@@ -143,6 +143,8 @@ class BoardSerializer(serializers.ModelSerializer):
         read_only_fields = ("id", "created", "updated")
 
     def update(self, instance, validated_data):
+        """Обновляет состав участников доски и их роли,
+         по умолчанию ее участником является собственник"""
         owner = validated_data.pop("user")
         new_participants = validated_data.pop("participants")
         new_by_id = {part["user"].id: part for part in new_participants}
@@ -151,18 +153,17 @@ class BoardSerializer(serializers.ModelSerializer):
         with transaction.atomic():
             for old_participant in old_participants:
                 if old_participant.user_id not in new_by_id:
-                    old_participant.delete()
+                    old_participant.delete()  # Удаляет старых участников, чьего айди нет в словаре из новых
                 else:
                     if (
                             old_participant.role
                             != new_by_id[old_participant.user_id]["role"]
                     ):
-                        old_participant.role = new_by_id[old_participant.user_id][
-                            "role"
-                        ]
+                        old_participant.role = new_by_id[old_participant.user_id]["role"]  # Перезаписывает роли старых
+                        # участников в случае их изменения
                         old_participant.save()
                     new_by_id.pop(old_participant.user_id)
-            for new_part in new_by_id.values():
+            for new_part in new_by_id.values():  # Записывает новых участников, создавая объекты соответствующего класса
                 BoardParticipant.objects.create(
                     board=instance, user=new_part["user"], role=new_part["role"]
                 )

@@ -8,6 +8,7 @@ from goals.models import Goal, GoalCategory
 
 class GoalDateFilter(rest_framework.FilterSet):
     class Meta:
+        """Фильтрует цели под дедлайну, категории, статусу, приоритету"""
         model = Goal
         fields = {
             "due_date": ("lte", "gte"),

@@ -4,6 +4,9 @@ from goals.models import BoardParticipant, GoalCategory, Goal
 
 class BoardPermissions(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
+        """
+        Дает доступ к небезопасным методам только владельцу доски
+        """
         if not request.user.is_authenticated:
             return False
         if request.method in permissions.SAFE_METHODS:
@@ -17,6 +20,9 @@ class BoardPermissions(permissions.BasePermission):
 
 class GoalCategoryPermission(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
+        """
+        Дает право редактировать категорию только владельцу доски или редактору
+        """
         if not request.user.is_authenticated:
             return False
         user = request.user
@@ -31,6 +37,9 @@ class GoalCategoryPermission(permissions.BasePermission):
 
 class GoalPermission(permissions.BasePermission):
     def has_object_permission(self, request, view, obj):
+        """
+        Дает право редактировать цель только владельцу доски или редактору
+        """
         if not request.user.is_authenticated:
             return False
         user = request.user

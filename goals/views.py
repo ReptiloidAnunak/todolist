@@ -125,7 +125,7 @@ class GoalView(RetrieveUpdateDestroyAPIView):
     def get_permissions(self):
         """В случае использования метода GET дает доступ к просмотру
         аутентифицированному пользователю.
-        В случае попытки изменения цели задействует GoalPermission"""
+        При попытке изменить цель задействует GoalPermission"""
         self.permission_classes = [permissions.IsAuthenticated]
 
         if self.request.method not in permissions.SAFE_METHODS:
