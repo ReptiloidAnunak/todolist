@@ -2,6 +2,7 @@
 from rest_framework import response, status
 from rest_framework.generics import UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
+from rest_framework import serializers
 
 from bot.management.commands.runbot import Command
 from bot.models import TgUser
@@ -17,7 +18,7 @@ class TgUserVerification(UpdateAPIView):
     def get_object(self) -> User:
         return self.request.user
 
-    def perform_update(self, serializer):
+    def perform_update(self, serializer: serializers.ModelSerializer) -> response.Response:
         """Получает верификационный код, проверяет его на соответствие с кодом
          в таблице телеграм-пользователей, связывает тг-аккаунт пользователя
          с его аккаунтом в приложении. Отправляет сообщение в тг об успешной верификации"""

@@ -2,6 +2,7 @@
 from rest_framework import serializers
 from django.contrib.auth.hashers import make_password
 from core.models import User
+from typing import Any
 
 
 class UserDetailSerializer(serializers.ModelSerializer):
@@ -24,7 +25,7 @@ class UserCreateSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError("Пароли должны совпадать")
         return attrs
 
-    def create(self, validated_data: dict) -> None:
+    def create(self, validated_data: dict) -> Any:
         """Создает запись пользователя в базе данных
         с проверенным и захэшироанным паролем"""
         del validated_data['password_repeat']

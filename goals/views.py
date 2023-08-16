@@ -1,12 +1,12 @@
 
 from django_filters.rest_framework import DjangoFilterBackend
 from django.db import transaction
-from rest_framework.generics import (CreateAPIView, ListAPIView, RetrieveUpdateDestroyAPIView,
-                                     )
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateDestroyAPIView
 from rest_framework import permissions, filters
 from rest_framework.pagination import LimitOffsetPagination
+from typing import List, Any
 
-from goals.models import GoalCategory, Goal, GoalComment, Board, BoardParticipant
+from goals.models import GoalCategory, Goal, GoalComment, Board
 from goals.serializers import (GoalCatCreateSerializer, GoalCategorySerializer, GoalCreateSerializer,
                                GoalSerializer, GoalCommentCreateSerializer, GoalCommentSerializer,
                                BoardCreateSerializer, BoardSerializer)
@@ -37,7 +37,7 @@ class GoalCategoryListView(ListAPIView):
     ordering = ["title"]
     search_fields = ["title"]
 
-    def get_queryset(self) -> list:
+    def get_queryset(self) -> List[Goal]:
         """Фильтрует категории исключительно
         для участников доски"""
         return GoalCategory.objects.filter(
@@ -50,14 +50,13 @@ class GoalCategoryView(RetrieveUpdateDestroyAPIView):
     model = GoalCategory
     serializer_class = GoalCategorySerializer
 
-    def get_queryset(self) -> list:
-        """Фильтрует категории исключительно
-        для участников доски"""
+    def get_queryset(self) -> List[GoalCategory]:
+        """Отбирает категорию исключительно для участников доски"""
         return GoalCategory.objects.filter(
             board__participants__user=self.request.user,
             is_deleted=False)
 
-    def get_permissions(self):
+    def get_permissions(self) -> Any:
         """Ограничивает права на изменение категорий читателю
         и неаутентифицированным пользователям"""
         self.permission_classes = [permissions.IsAuthenticated]
@@ -66,7 +65,7 @@ class GoalCategoryView(RetrieveUpdateDestroyAPIView):
             self.permission_classes = [GoalCategoryPermission]
         return super(GoalCategoryView, self).get_permissions()
 
-    def perform_destroy(self, instance):
+    def perform_destroy(self, instance: GoalCategory) -> GoalCategory:
         """Переводит категорию в статус is_deleted
         вместо полного ее удаления из базы данных"""
         cat_goals = Goal.objects.filter(category=instance.id)
@@ -115,14 +114,14 @@ class GoalView(RetrieveUpdateDestroyAPIView):
     model = Goal
     serializer_class = GoalSerializer
 
-    def get_queryset(self):
+    def get_queryset(self) -> List[Goal]:
         """Фильтрует цели исключительно
         для участников доски"""
         return Goal.objects.filter(
             category__board__participants__user=self.request.user,
             is_deleted=False)
 
-    def get_permissions(self):
+    def get_permissions(self) -> Any:
         """В случае использования метода GET дает доступ к просмотру
         аутентифицированному пользователю.
         При попытке изменить цель задействует GoalPermission"""
@@ -132,7 +131,7 @@ class GoalView(RetrieveUpdateDestroyAPIView):
             self.permission_classes = [GoalPermission]
         return super(GoalView, self).get_permissions()
 
-    def perform_destroy(self, instance):
+    def perform_destroy(self, instance: Goal) -> Goal:
         """Переводит цель в статус is_deleted
         вместо полного удаления из базы данных"""
         instance.is_deleted = True
@@ -149,7 +148,7 @@ class GoalCommentListView(ListAPIView):
     filterset_fields = ["goal"]
     ordering = "-id"
 
-    def get_queryset(self):
+    def get_queryset(self) -> List[GoalComment]:
         """Фильтрует комментарии к целям
         исключительно для участников доски"""
         return GoalComment.objects.filter(
@@ -169,7 +168,7 @@ class GoalCommentView(RetrieveUpdateDestroyAPIView):
     serializer_class = GoalCommentSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    def get_queryset(self):
+    def get_queryset(self) -> List[GoalComment]:
         """Позволяет редактировать и удалять комментарий
          только его автору"""
         return GoalComment.objects.filter(user=self.request.user)
@@ -187,12 +186,12 @@ class BoardView(RetrieveUpdateDestroyAPIView):
     permission_classes = [permissions.IsAuthenticated, BoardPermissions]
     serializer_class = BoardSerializer
 
-    def get_queryset(self):
+    def get_queryset(self) -> List[Board]:
         """Позволяет видеть доску исключительно ее участникам"""
         return Board.objects.filter(participants__user=self.request.user,
                                     is_deleted=False)
 
-    def perform_destroy(self, instance: Board):
+    def perform_destroy(self, instance: Board) -> Board:
         """Переводит доску в статус is_deleted вместо полного ее удаления из базы данных,
         а также связанные с ней категории. Цели переводятся в архив
         для возможного дальнейшего перераспределения"""
@@ -215,7 +214,7 @@ class BoardListView(ListAPIView):
     ordering_fields = ["title", "created"]
     ordering = ["title"]
 
-    def get_queryset(self):
+    def get_queryset(self) -> List[Board]:
         """Позволяет видеть список досок исключительно их участникам"""
         return Board.objects.filter(
             participants__user=self.request.user, is_deleted=False

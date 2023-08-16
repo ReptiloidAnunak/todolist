@@ -3,7 +3,7 @@ from goals.models import BoardParticipant, GoalCategory, Goal
 
 
 class BoardPermissions(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj):
+    def has_object_permission(self, request, view, obj) -> bool:
         """
         Дает доступ к небезопасным методам только владельцу доски
         """
@@ -19,7 +19,7 @@ class BoardPermissions(permissions.BasePermission):
 
 
 class GoalCategoryPermission(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj):
+    def has_object_permission(self, request, view, obj) -> bool:
         """
         Дает право редактировать категорию только владельцу доски или редактору
         """
@@ -36,7 +36,7 @@ class GoalCategoryPermission(permissions.BasePermission):
 
 
 class GoalPermission(permissions.BasePermission):
-    def has_object_permission(self, request, view, obj):
+    def has_object_permission(self, request, view, obj) -> bool:
         """
         Дает право редактировать цель только владельцу доски или редактору
         """

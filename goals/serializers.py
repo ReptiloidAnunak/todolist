@@ -142,7 +142,7 @@ class BoardSerializer(serializers.ModelSerializer):
         fields = "__all__"
         read_only_fields = ("id", "created", "updated")
 
-    def update(self, instance, validated_data):
+    def update(self, instance: Board, validated_data) -> Board:
         """Обновляет состав участников доски и их роли,
          по умолчанию ее участником является собственник"""
         owner = validated_data.pop("user")
