@@ -27,7 +27,7 @@ class TgUserVerification(UpdateAPIView):
         tg_user = TgUser.objects.get(verification_code=ver_code)
         user = self.get_object()
         answer = "Верификация прошла успешно"
-        tg_user.user_id = user
+        tg_user.user = user
         tg_user.save()
         user.verification_code = tg_user.verification_code
         user.save()
