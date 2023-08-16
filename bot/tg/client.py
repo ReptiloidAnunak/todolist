@@ -1,6 +1,6 @@
 import requests
 import json
-from typing import Union, Dict, List, Any
+from typing import Union, Any
 
 from bot.tg.dc import GetUpdatesResponse, SendMessageResponse
 from todolist.settings import TG_BOT_TOKEN

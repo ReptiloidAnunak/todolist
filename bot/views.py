@@ -11,9 +11,9 @@ from core.models import User
 
 
 class TgUserVerification(UpdateAPIView):
-    queryset = User
     serializer_class = TgUserVerificationSerializer
     permission_classes = [IsAuthenticated]
+    success_ver_answ = "Верификация прошла успешно"
 
     def get_object(self) -> User:
         return self.request.user
@@ -21,18 +21,22 @@ class TgUserVerification(UpdateAPIView):
     def perform_update(self, serializer: serializers.ModelSerializer) -> response.Response:
         """Получает верификационный код, проверяет его на соответствие с кодом
          в таблице телеграм-пользователей, связывает тг-аккаунт пользователя
-         с его аккаунтом в приложении. Отправляет сообщение в тг об успешной верификации"""
-        tg_client = Command.tg_client
+         с его аккаунтом в приложении."""
         ver_code = self.request.data["verification_code"]
         tg_user = TgUser.objects.get(verification_code=ver_code)
-        user = self.get_object()
-        answer = "Верификация прошла успешно"
-        tg_user.user = user
+        tg_user.user_id = self.get_object()
         tg_user.save()
-        user.verification_code = tg_user.verification_code
-        user.save()
-        tg_client.send_message(chat_id=tg_user.tg_chat_id, text=answer)
-        return response.Response(answer, status=status.HTTP_200_OK)
+
+        self._send_tg_confirmation(tg_user.tg_chat_id)
+        return response.Response(self.success_ver_answ,
+                                 status=status.HTTP_200_OK)
+
+    def _send_tg_confirmation(self, tg_chat_id):
+        """ Отправляет сообщение в тг об успешной верификации"""
+        tg_client = Command.tg_client
+        tg_client.send_message(chat_id=tg_chat_id,
+                               text=self.success_ver_answ)
+
 
 
 
