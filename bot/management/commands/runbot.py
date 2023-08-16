@@ -11,8 +11,6 @@ from core.models import User
 from goals.models import Goal, GoalCategory
 from typing import List, Dict
 
-# python3 manage.py runbot
-
 
 class Command(BaseCommand):
     help = "Run telegram-bot"
@@ -66,7 +64,7 @@ class Command(BaseCommand):
         else:
             self.route_process(item, tg_user)
 
-    def route_process(self, item, tg_user: TgUser) -> None:
+    def route_process(self, item: UpdateObj, tg_user: TgUser) -> None:
         """Марштуризирует коммуникацию бота
          и пользователя на основе маркеров в сообщениях первого"""
         user_message = item.message.text
@@ -87,7 +85,7 @@ class Command(BaseCommand):
             self.tg_client.send_message(chat_id=tg_user.tg_chat_id,
                                         text="Неизвестная команда")
 
-    def get_goals(self, item) -> None:
+    def get_goals(self, item: UpdateObj) -> None:
         """Возвращает список целей верифицированного пользователя приложения"""
         tg_user_id = item.message.from_.id
         chat_id = item.message.chat.id

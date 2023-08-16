@@ -7,12 +7,12 @@ from todolist.settings import TG_BOT_TOKEN
 import marshmallow_dataclass
 
 
-GetUpdatesResponseSchema = marshmallow_dataclass.class_schema(
+get_updates_response_schema = marshmallow_dataclass.class_schema(
     GetUpdatesResponse
-)
-SendMessageResponseSchema = marshmallow_dataclass.class_schema(
+)()
+send_message_response_schema = marshmallow_dataclass.class_schema(
     SendMessageResponse
-)
+)()
 
 
 class BotUrlMethods:
@@ -33,9 +33,9 @@ class TgClient:
         url = self.get_url(BotUrlMethods.GET_UPDATES)
         response = requests.get(url)
         try:
-            return GetUpdatesResponseSchema().loads(response.text)
-        except Exception:
-            print(f'Failed to parse data: {response}')
+            return get_updates_response_schema.loads(response.text)
+        except Exception as e:
+            print(f'Failed to parse data: {response} due error: {e}')
             raise NotImplementedError
 
     def send_message(self, chat_id: int, text: str) -> SendMessageResponse:
@@ -43,7 +43,7 @@ class TgClient:
         url = self.get_url(BotUrlMethods.SEND_MESSAGE) + '?chat_id=' + str(chat_id) + '&text=' + text
         message_resp = requests.get(url)
         try:
-            return SendMessageResponseSchema().loads(message_resp.text)
-        except Exception:
-            print(f'Failed to send data: {message_resp}')
-            raise NotImplementedError
+            return send_message_response_schema.loads(message_resp.text)
+        except Exception as e:
+            print(f'Failed to send data: {message_resp} due error: {e}')
+            return None
