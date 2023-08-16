@@ -9,6 +9,7 @@ from bot.utils import (generate_verification_code, create_goal_list_message,
                        create_categories_list, confirm_goal_creation)
 from core.models import User
 from goals.models import Goal, GoalCategory
+from typing import List, Dict
 
 # python3 manage.py runbot
 
@@ -19,9 +20,9 @@ class Command(BaseCommand):
     user_authenticated = False
 
     bot_commands = ["/goals", "/create"]
-    categories_numbers = []
-    categories_dict = {}
-    category_title = ""
+    categories_numbers: List[int] = []
+    categories_dict: Dict[int, str] = {}
+    category_title: str = ""
 
     def handle(self, *args, **options: Any) -> None:
         """Позволяет боту отвечать только на новое сообщение пользователя

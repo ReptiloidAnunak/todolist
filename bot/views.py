@@ -6,7 +6,7 @@ from rest_framework import serializers
 
 from bot.management.commands.runbot import Command
 from bot.models import TgUser
-from bot.setializers import TgUserVerificationSerializer
+from bot.serializers import TgUserVerificationSerializer
 from core.models import User
 
 
@@ -31,7 +31,7 @@ class TgUserVerification(UpdateAPIView):
         return response.Response(self.success_ver_answ,
                                  status=status.HTTP_200_OK)
 
-    def _send_tg_confirmation(self, tg_chat_id):
+    def _send_tg_confirmation(self, tg_chat_id: int) -> None:
         """ Отправляет сообщение в тг об успешной верификации"""
         tg_client = Command.tg_client
         tg_client.send_message(chat_id=tg_chat_id,

@@ -1,7 +1,7 @@
 import string
 import secrets
 
-from goals.models import Goal, GoalCategory
+from goals.models import Goal
 
 
 def generate_verification_code() -> str:
@@ -22,8 +22,8 @@ def create_goal_list_message(g_list: list) -> str:
         point = f"\n{str(number)}. {goal}"
         points.append(point)
 
-    points = "\n".join(points)
-    result = title + points
+    points_str = "\n".join(points)
+    result = title + points_str
     return result
 
 
