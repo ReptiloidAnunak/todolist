@@ -43,7 +43,7 @@
 
 1. Установить необходимые пакеты с помощью команды `pip install -r requirements.txt`
 2. Установить docker в случае его отсутствия
-3. Запустить команду docker compose up -d
+3. Запустить команду `docker compose up -d`
 4. Открыть ссылку: http://127.0.0.1/auth
 5. Отправить сообщение телеграм-боту https://t.me/todolistreptil_bot, аутентифицироваться в приложении с помощью верификационного кода.
 
@@ -59,9 +59,4 @@
 Обновление вольюмов при внесении правок в код:
 1. `docker system prune -af`
 2. `docker volume prune -f`
-
-Посмотреть логи ошибок:
-1. `docker compose logs -f api`
-
-* Локальная ссылка на приложение: http://127.0.0.1/auth
-* Основной сайт: http://reptiloidanunak.site/auth
+3. Посмотреть логи ошибок: `docker compose logs -f api`
