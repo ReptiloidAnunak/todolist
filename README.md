@@ -34,32 +34,34 @@
 
 Актуальная версия размещена на сайте http://reptiloidanunak.site
 
-Также завершается разработка телеграм-бота, реализующего мобильное взаимодействие пользователя с базой данных приложения
+**Телеграм-бот**
+1. Привязывает аккаунт телеграм-пользователя к его аккаунту в приложении с помощью верификационного кода
+2. По команде пользователя выдает актуальный список его целей 
+3. Позволяет создать новую цель
 
-**Запуск приложения**
+**Локальный запуск приложения**
 
-1. Установить необходимые пакеты с помощью команды _pip install -r requirements.txt
+1. Установить необходимые пакеты с помощью команды `pip install -r requirements.txt`
 2. Установить docker в случае его отсутствия
 3. Запустить команду docker compose up -d
 4. Открыть ссылку: http://127.0.0.1/auth
-
-
+5. Отправить сообщение телеграм-боту https://t.me/todolistreptil_bot, аутентифицироваться в приложении с помощью верификационного кода.
 
 В случае проблем с запуском контейнера в терминале запустить следующие команды:
-1. docker compose down
-2. sudo systemctl stop docker
-3. sudo systemctl start docker
-4. lsof -i :5432 | sudo ss -lptn 'sport = :5432'
-5. sudo kill pid
-6. sudo service apache2 stop
-7. docker compose up -d
+1. `docker compose down`
+2. `sudo systemctl stop docker`
+3. `sudo systemctl start docker`
+4. `lsof -i :5432 | sudo ss -lptn 'sport = :5432'`
+5. `sudo kill <pid>` 
+6. `sudo service apache2 stop`
+7. `docker compose up -d`
 
 Обновление вольюмов при внесении правок в код:
-1. docker system prune -af
-2. docker volume prune -f
+1. `docker system prune -af`
+2. `docker volume prune -f`
 
 Посмотреть логи ошибок:
-1. docker compose logs -f api
+1. `docker compose logs -f api`
 
 * Локальная ссылка на приложение: http://127.0.0.1/auth
 * Основной сайт: http://reptiloidanunak.site/auth

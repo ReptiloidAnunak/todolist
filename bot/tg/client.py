@@ -38,7 +38,7 @@ class TgClient:
             print(f'Failed to parse data: {response} due error: {e}')
             raise NotImplementedError
 
-    def send_message(self, chat_id: int, text: str) -> SendMessageResponse:
+    def send_message(self, chat_id: int, text: str) -> Union[SendMessageResponse, None]:
         """Отправляет пользователю сообщение"""
         url = self.get_url(BotUrlMethods.SEND_MESSAGE) + '?chat_id=' + str(chat_id) + '&text=' + text
         message_resp = requests.get(url)
