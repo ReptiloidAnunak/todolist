@@ -1,5 +1,4 @@
 # **TODOLIST app**
-ПРОЕКТ НА СТАДИИ РАЗРАБОТКИ
 
 **_Стек:_** _python3.9, Django, Postgres_
 
