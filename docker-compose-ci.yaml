@@ -1,8 +1,26 @@
 
 version: "3.9"
 services:
+  bot:
+    image: artemiystepanov/todolist:$GITHUB_REF_NAME-$GITHUB_RUN_ID
+    env_file: .env
+    environment:
+      DB_HOST: postgres
+    dns: 8.8.8.8
+    depends_on:
+      postgres:
+        condition: service_healthy
+      migrations:
+        condition: service_completed_successfully
+    volumes:
+      - /var/lib/todolist/bot
+    command:
+      - python3
+      - manage.py
+      - runbot
+
   frontend:
-    image: sermalenk/skypro-front:lesson-36
+    image: sermalenk/skypro-front:lesson-38
     ports:
       - "80:80"
     depends_on:
@@ -11,8 +29,6 @@ services:
   api:
     image: artemiystepanov/todolist:$GITHUB_REF_NAME-$GITHUB_RUN_ID
     env_file: .env
-#    ports:
-#      - 80:80
     depends_on:
       postgres:
         condition: service_healthy
@@ -30,13 +46,13 @@ services:
   postgres:
       image: postgres:latest
       environment:
-        POSTGRES_USER: .env.DB_USER
-        POSTGRES_PASSWORD: .env.DB_PASSWORD
-        POSTGRES_DB: .env.DB_NAME
+        POSTGRES_USER: ${DB_USER}
+        POSTGRES_PASSWORD: ${DB_PASSWORD}
+        POSTGRES_DB: ${DB_NAME}
       healthcheck:
-        test: ["CMD-SHELL", "pg_isready -U postgres"]
+        test: [ "CMD-SHELL", "pg_isready -U ${DB_USER} -d ${DB_NAME}" ]
         interval: 5s
-        timeout: 10s
+        timeout: 5s
         retries: 10
 
       volumes:

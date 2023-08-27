@@ -32,8 +32,8 @@ SECRET_KEY = env('SECRET_KEY')
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = env.bool('DEBUG')
-DEBUG = True
+DEBUG = env.bool('DEBUG')
+# DEBUG = True
 ALLOWED_HOSTS = ["*"]
 
 
@@ -47,7 +47,11 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "social_django",
+    "django_filters",
     "core",
+    "goals",
+    "bot",
 
 ]
 
@@ -55,6 +59,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
+    "social_django.middleware.SocialAuthExceptionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
@@ -98,20 +103,6 @@ DATABASES = {
     }
 }
 
-# DATABASES = {
-#     # read os.environ['DATABASE_URL'] and raises
-#     # ImproperlyConfigured exception if not found
-#     #
-#     # The db() method is an alias for db_url().
-#     'default': env.db(),
-#
-#     # read os.environ['SQLITE_URL']
-#     'extra': env.db_url(
-#         'SQLITE_URL',
-#         default='sqlite:////tmp/my-tmp-sqlite.db'
-#     )
-# }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
@@ -132,6 +123,35 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = "core.User"
+
+SOCIAL_AUTH_JSONFIELD_ENABLED = True
+
+AUTHENTICATION_BACKENDS = (
+    'social_core.backends.vk.VKOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+
+)
+
+# Social media authentication
+
+SOCIAL_AUTH_VK_OAUTH2_KEY = env('VK_OAUTH2_KEY')
+SOCIAL_AUTH_VK_OAUTH2_SECRET = env('VK_OAUTH2_SECRET')
+SOCIAL_AUTH_VK_OAUTH2_SCOPE = ['email', 'first_name', 'last_name']
+SOCIAL_AUTH_USER_MODEL = "core.User"
+
+
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = "/logged-in/"
+SOCIAL_AUTH_LOGIN_ERROR_URL = '/core/login'
+SOCIAL_AUTH_NEW_USER_REDIRECT_URL = '/logged-in/'
+SOCIAL_AUTH_NEW_ASSOCIATION_REDIRECT_URL = '/logged-in/'
+SOCIAL_AUTH_DISCONNECT_REDIRECT_URL = '/core/login'
+SOCIAL_AUTH_INACTIVE_USER_URL = '/core/login'
+
+VKOAuth2_SOCIAL_AUTH_RAISE_EXCEPTIONS = True
+SOCIAL_AUTH_RAISE_EXCEPTIONS = True
+
+# Telegram bot
+TG_BOT_TOKEN = env('TG_BOT_TOKEN')
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.2/topics/i18n/
@@ -156,3 +176,7 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
+}

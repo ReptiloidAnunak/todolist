@@ -1,5 +1,6 @@
 from django.contrib import admin
 from core.models import User
+from goals.models import GoalCategory, Goal, GoalComment, Board
 
 
 class UserAdmin(admin.ModelAdmin):
@@ -9,4 +10,29 @@ class UserAdmin(admin.ModelAdmin):
               'is_active', 'is_staff', 'date_joined', 'last_login', 'image']
 
 
+class GoalCategoryAdmin(admin.ModelAdmin):
+    list_display = ("title", "user", "created", "updated")
+    search_fields = ("title", "user__username")
+
+
+class GoalAdmin(admin.ModelAdmin):
+    list_display = ("title", "category",  "user", "created", "updated", "is_deleted")
+    search_fields = ("category", "title", "user__username")
+
+
+class GoalCommentAdmin(admin.ModelAdmin):
+    list_display = ("text", "goal",  "user", "created", "updated")
+    search_fields = ("text", "goal__title", "user__username")
+
+
+class BoardAdmin(admin.ModelAdmin):
+    list_display = ("id", "title", "created", "updated", "is_deleted")
+    search_fields = ("title", "id", "participants__user__username")
+
+
 admin.site.register(User, UserAdmin)
+admin.site.register(GoalCategory, GoalCategoryAdmin)
+admin.site.register(Goal, GoalAdmin)
+admin.site.register(GoalComment, GoalCommentAdmin)
+admin.site.register(Board, BoardAdmin)
+

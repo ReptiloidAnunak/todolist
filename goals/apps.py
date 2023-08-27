@@ -1,7 +1,6 @@
 from django.apps import AppConfig
 
 
-class CoreConfig(AppConfig):
+class GoalsConfig(AppConfig):
     default_auto_field = "django.db.models.BigAutoField"
-    name = "core"
-
+    name = "goals"
